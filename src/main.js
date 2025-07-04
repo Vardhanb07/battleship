@@ -25,6 +25,18 @@ class Gameboard {
     this.gameboard = new Array(10).fill().map(() => new Array(10).fill(null));
     this.setOfMissedAttacks = new Set();
   }
+  isValid(startCoordinate, endCoordinate) {
+    return (
+      startCoordinate.x >= 0 &&
+      startCoordinate.x <= 10 &&
+      startCoordinate.y >= 0 &&
+      startCoordinate.y <= 10 &&
+      endCoordinate.x >= 0 &&
+      endCoordinate.x <= 10 &&
+      endCoordinate.y >= 0 &&
+      endCoordinate.y <= 10
+    );
+  }
   #canBePlaced(startOrdinate, endOridnate, commonOrdinate, direction) {
     let bool = true;
     for (let i = 0; i < 3; i++) {
@@ -139,7 +151,7 @@ class Gameboard {
   missedAttacks() {
     return this.setOfMissedAttacks;
   }
-  areSunk() {
+  areShipsSunk() {
     let bool = true;
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
@@ -152,5 +164,38 @@ class Gameboard {
       }
     }
     return bool;
+  }
+}
+class Player {
+  constructor() {
+    this.carrier = new Ship(5);
+    this.battleship = new Ship(4);
+    this.cruiser = new Ship(3);
+    this.submarine = new Ship(3);
+    this.destroyer = new Ship(2);
+    this.ships = [
+      this.carrier,
+      this.battleship,
+      this.cruiser,
+      this.submarine,
+      this.destroyer,
+    ];
+    this.gameboard = new Gameboard();
+  }
+  place(startCoordinate, endCoordinate, shipId) {
+    const s = new Coordinate(startCoordinate[0], startCoordinate[1]);
+    const e = new Coordinate(endCoordinate[0], endCoordinate[1]);
+    if (this.gameboard.isValid(s, e)) {
+      this.gameboard.place(s, e, this.ships[shipId]);
+      return true;
+    }
+    return false;
+  }
+  receiveAttack(coordinate) {
+    const position = new Coordinate(coordinate[0], coordinate[1]);
+    this.gameboard.receiveAttack(position.x, position.y);
+  }
+  isDefeated() {
+    return this.gameboard.areShipsSunk();
   }
 }
