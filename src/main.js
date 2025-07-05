@@ -28,16 +28,16 @@ class Gameboard {
   isValid(startCoordinate, endCoordinate) {
     return (
       startCoordinate.x >= 0 &&
-      startCoordinate.x <= 10 &&
+      startCoordinate.x < 10 &&
       startCoordinate.y >= 0 &&
-      startCoordinate.y <= 10 &&
+      startCoordinate.y < 10 &&
       endCoordinate.x >= 0 &&
-      endCoordinate.x <= 10 &&
+      endCoordinate.x < 10 &&
       endCoordinate.y >= 0 &&
-      endCoordinate.y <= 10
+      endCoordinate.y < 10
     );
   }
-  #canBePlaced(startOrdinate, endOridnate, commonOrdinate, direction) {
+  canBePlaced(startOrdinate, endOridnate, commonOrdinate, direction) {
     let bool = true;
     for (let i = 0; i < 3; i++) {
       for (let j = startOrdinate - 1; j < endOridnate + 2; j++) {
@@ -52,7 +52,7 @@ class Gameboard {
             bool = false;
           } else if (
             i == 2 &&
-            commonOrdinate + 1 <= 10 &&
+            commonOrdinate + 1 < 10 &&
             this.gameboard[commonOrdinate + 1][j] === null
           ) {
             bool = false;
@@ -71,7 +71,7 @@ class Gameboard {
             bool = false;
           } else if (
             i === 2 &&
-            commonOrdinate + 1 <= 10 &&
+            commonOrdinate + 1 < 10 &&
             this.gameboard[j][commonOrdinate + 1] === null
           ) {
             bool = false;
@@ -87,7 +87,7 @@ class Gameboard {
   place(startCoordinate, endCoordinate, ship) {
     if (startCoordinate.x === endCoordinate.x) {
       if (
-        this.#canBePlaced(
+        this.canBePlaced(
           startCoordinate.y,
           endCoordinate.y,
           startCoordinate.x,
@@ -104,7 +104,7 @@ class Gameboard {
               } else {
                 this.gameboard[j][startCoordinate.x] = ship;
               }
-            } else if (i === 2 && startCoordinate.x + 1 <= 10) {
+            } else if (i === 2 && startCoordinate.x + 1 < 10) {
               this.gameboard[j][startCoordinate.x + 1] = "O";
             }
           }
@@ -112,7 +112,7 @@ class Gameboard {
       }
     } else if (startCoordinate.y === endCoordinate.y) {
       if (
-        this.#canBePlaced(
+        this.canBePlaced(
           startCoordinate.x,
           endCoordinate.x,
           startCoordinate.y,
@@ -129,7 +129,7 @@ class Gameboard {
               } else {
                 this.gameboard[startCoordinate.y][j] = ship;
               }
-            } else if (i === 2 && startCoordinate.y + 1 <= 10) {
+            } else if (i === 2 && startCoordinate.y + 1 < 10) {
               this.gameboard[startCoordinate.y + 1][j] = "O";
             }
           }
@@ -166,7 +166,7 @@ class Gameboard {
     return bool;
   }
 }
-class Player {
+export class Player {
   constructor() {
     this.carrier = new Ship(5);
     this.battleship = new Ship(4);
@@ -197,5 +197,28 @@ class Player {
   }
   isDefeated() {
     return this.gameboard.areShipsSunk();
+  }
+  //this.canBePlaced is different from Gameboard.canBePlaced
+  canBePlaced(firstOrdinate, secondOrdinate, length, direction) {
+    let bool = true;
+    if (direction === "H") {
+      for (let i = firstOrdinate; i < firstOrdinate + length + 1; i++) {
+        if (typeof this.gameboard.gameboard[i][secondOrdinate] != "object") {
+          bool = false;
+          break;
+        }
+      }
+    } else if (direction === "V") {
+      for (let i = secondOrdinate; i < secondOrdinate + length + 1; i++) {
+        if (typeof this.gameboard.gameboard[firstOrdinate][i] != "object") {
+          bool = false;
+          break;
+        }
+      }
+    }
+    return bool;
+  }
+  print() {
+    console.log(this.gameboard.gameboard)
   }
 }
