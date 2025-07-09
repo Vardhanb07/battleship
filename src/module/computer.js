@@ -9,7 +9,7 @@ function isValid(firstOrdinate, secondOrdinate, length, direction) {
     : (bool = firstOrdinate + length >= 0 && firstOrdinate + length < 10);
   return bool;
 }
-const computer = new Player();
+export const computer = new Player();
 const directions = ["H", "V"];
 export function getRandomPosition(length) {
   let firstOrdinate = getRandomInt(9);
@@ -41,5 +41,3 @@ for (let i = 0; i < shipsLength.length; i++) {
   const position = initialize(shipsLength[i] - 1);
   computer.place(position[0], position[1], i);
 }
-computer.receiveAttack([0,0])
-computer.print()

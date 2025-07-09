@@ -1,2 +1,5 @@
 import "./styles.css"
+import "./fonts/lexend/stylesheet.css"
 import "./dom.js"
+import "./module/app.js"
+import "./module/computer.js"

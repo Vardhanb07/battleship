@@ -1,8 +1,66 @@
 * {
-    padding: 0;
-    margin: 0;
+  margin: 0;
+  padding: 0;
 }
-h1 {
-    font-family: monospace;
-    color: black;
+.game-section {
+  display: none;
 }
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.navigation {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.start-section {
+  flex: 8;
+}
+.title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.randomize, .reset {
+  flex: 2;
+}
+.title-battleship {
+  font-family: 'Lexend';
+  font-size: 35px;
+}
+.title-battleship + p {
+  font-family: 'Lexend';
+  font-size: 20px;
+}
+.randomize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.randomize > p {
+  font-family: 'Lexend';
+  font-size: 25px;
+  cursor: pointer;
+}
+.randomize > p:hover {
+  text-decoration: black wavy underline;
+}
+.reset {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.reset > p {
+  font-family: 'Lexend';
+  font-size: 25px;
+  cursor: pointer;
+}
+.reset > p:hover {
+  text-decoration: black wavy underline;
+}
+
