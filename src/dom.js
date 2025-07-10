@@ -12,7 +12,7 @@ ships.forEach((ship) => {
   x++;
 });
 
-const board = document.querySelector(".board");
+const gameBoard = document.querySelector(".game-board");
 for (let i = 0; i < 10; i++) {
   let outerDiv = document.createElement("div");
   for (let j = 0; j < 10; j++) {
@@ -20,5 +20,27 @@ for (let i = 0; i < 10; i++) {
     innerDiv.setAttribute('data-position', `${i}-${j}`)
     outerDiv.appendChild(innerDiv)
   }
+  gameBoard.appendChild(outerDiv)
+}
+
+const board = document.querySelector('.board')
+for(let i = 0; i < 10; i++) {
+  let outerDiv = document.createElement('div')
+  for(let j = 0; j < 10; j++) {
+    let innerDiv = document.createElement('div')
+    innerDiv.setAttribute('data-position', `${i}-${j}`)
+    outerDiv.appendChild(innerDiv)
+  }
   board.appendChild(outerDiv)
+}
+
+const computerBoard = document.querySelector('.computer-board')
+for(let i = 0; i < 10; i++) {
+  let outerDiv = document.createElement('div')
+  for(let j = 0; j < 10; j++) {
+    let innerDiv = document.createElement('div')
+    innerDiv.setAttribute('data-position', `${i}-${j}`)
+    outerDiv.appendChild(innerDiv)
+  }
+  computerBoard.appendChild(outerDiv)
 }
