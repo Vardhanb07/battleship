@@ -1,8 +1,8 @@
 import { Player } from "./app.js";
-function getRandomInt(max) {
+export function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-function isValid(firstOrdinate, secondOrdinate, length, direction) {
+export function isValid(firstOrdinate, secondOrdinate, length, direction) {
   let bool = false;
   direction === "H"
     ? (bool = secondOrdinate + length >= 0 && secondOrdinate + length < 10)
@@ -10,18 +10,27 @@ function isValid(firstOrdinate, secondOrdinate, length, direction) {
   return bool;
 }
 export const computer = new Player();
-const directions = ["H", "V"];
+export const directions = ["H", "V"];
 export function getRandomPosition(length) {
   let firstOrdinate = getRandomInt(9);
   let secondOrdinate = getRandomInt(9);
   let direction = directions[getRandomInt(2)];
-  while (
-    !isValid(firstOrdinate, secondOrdinate, length, direction) &&
-    !computer.canBePlaced(firstOrdinate, secondOrdinate, length, direction)
+  if (
+    !(
+      isValid(firstOrdinate, secondOrdinate, length, direction) &&
+      computer.canBePlaced(firstOrdinate, secondOrdinate, length, direction)
+    )
   ) {
-    firstOrdinate = getRandomInt(9);
-    secondOrdinate = getRandomInt(9);
-    direction = directions[getRandomInt(2)];
+    while (
+      !(
+        isValid(firstOrdinate, secondOrdinate, length, direction) &&
+        computer.canBePlaced(firstOrdinate, secondOrdinate, length, direction)
+      )
+    ) {
+      firstOrdinate = getRandomInt(9);
+      secondOrdinate = getRandomInt(9);
+      direction = directions[getRandomInt(2)];
+    }
   }
   return {
     ordinates: [firstOrdinate, secondOrdinate],

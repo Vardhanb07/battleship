@@ -12,24 +12,15 @@
         <p>Place your ships</p>
       </div>
       <div class="randomize">
-        <p>Randomize</p>
+        <p id="randomize">Randomize</p>
       </div>
       <div class="reset">
-        <p>Reset</p>
+        <p id="reset">Reset</p>
       </div>
     </nav>
     <div class="start-section">
       <div class="place-ships">
-        <div class="ships-title">
-          <p>Ships</p>
-        </div>
-        <div class="ships">
-          <div class="carrier" draggable="true" title="carrier"></div>
-          <div class="battleship" draggable="true" title="battleship"></div>
-          <div class="cruiser" draggable="true" title="cruiser"></div>
-          <div class="submarine" draggable="true" title="submarine"></div>
-          <div class="destroyer" draggable="true" title="destroyer"></div>
-        </div>
+        <button>Axis: X</button>
       </div>
       <div class="initial-board">
         <div class="board-title">
@@ -39,8 +30,14 @@
       </div>
     </div>
     <div class="game-section">
-      <div class="board"></div>
-      <div class="computer-board"></div>
+      <div>
+        <div class="real-player-title"><p>Your board:</p></div>
+        <div class="board"></div>
+      </div>
+      <div>
+        <div class="computer-title"><p>Computer's board:</p></div>
+        <div class="computer-board"></div>
+      </div>
     </div>
   </body>
 </html>

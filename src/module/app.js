@@ -20,12 +20,13 @@ class Gameboard {
     this.missedAtttacks = [];
   }
   canBePlaced(startOrdinate, endOrdinate, commonOrdinate, direction) {
-    let bool = true;
-    bool =
+    let bool =
       startOrdinate >= 0 &&
       startOrdinate < 10 &&
       endOrdinate >= 0 &&
-      endOrdinate < 10;
+      endOrdinate < 10 &&
+      commonOrdinate >= 0 &&
+      commonOrdinate < 10;
     if (direction === "H" && bool) {
       for (let i = startOrdinate; i <= endOrdinate; i++) {
         if (this.board[commonOrdinate][i] !== null) {
@@ -135,7 +136,7 @@ export class Player {
           secondOrdinate,
           direction
         ));
-    return bool
+    return bool;
   }
   place(startPosition, endPosition, shipId) {
     this.gameboard.place(startPosition, endPosition, this.ships[shipId]);
