@@ -16,8 +16,7 @@ body {
 .start-section {
   flex: 8;
   display: flex;
-  flex-direction: row;
-  display: none;
+  flex-direction: column;
 }
 .title {
   flex: 1;
@@ -66,7 +65,7 @@ body {
 }
 .game-section {
   flex: 6;
-  display: flex;
+  display: none;
   flex-direction: row;
 }
 .game-section > div {
@@ -107,4 +106,35 @@ body {
 }
 #drop {
   background-color: rgb(139, 185, 245);
+}
+.place-ships {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.place-ships > button {
+  border: 1px solid black;
+  background-color: white;
+  font-size: 30px;
+  font-family: "Lexend";
+  padding: 6px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.game-board {
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.game-board > div {
+  display: flex;
+  flex-direction: row;
+}
+.game-board > div > div {
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
 }

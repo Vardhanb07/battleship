@@ -45,7 +45,25 @@ for (let i = 0; i < 10; i++) {
   computerBoard.appendChild(outerDiv);
 }
 
+const gameSection = document.querySelector('.game-section')
+const startSection = document.querySelector('.start-section')
+
 document.addEventListener("DOMContentLoaded", () => {
+  const reset = document.querySelector('.reset')
+  reset.addEventListener('click', () => {
+    for(let i = 0; i < 10; i++) {
+      for(let j = 0; j < 10; j++) {
+        document
+          .querySelector(`div[data-position="${i}-${j}-rp"]`)
+          .removeAttribute("id");
+      }
+    }
+
+    gameSection.style.display = 'none'
+    startSection.style.display = 'flex'
+  })
+
+
   document.querySelector("#randomize").addEventListener("click", () => {
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
@@ -54,7 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
           .removeAttribute("id");
       }
     }
+
     randomize();
+
     for (let i = 0; i < 5; i++) {
       let { start, end } = shipsPostiton[i];
       if (start[0] === end[0]) {
@@ -71,5 +91,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
+
+    gameSection.style.display = 'flex'
+    startSection.style.display = 'none'
+  });
+
+  const realPlayerCells = document.querySelectorAll(".board > div > div");
+  realPlayerCells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      const cellPosition = cell
+        .getAttribute("data-position")
+        .split("-")
+        .slice(0, 2)
+        .map((i) => parseInt(i));
+      real.receiveAttack(cellPosition);
+    });
+  });
+
+  const computerCells = document.querySelectorAll("computer-board > div > div");
+  computerCells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      const cellPosition = cell
+        .getAttribute("data-position")
+        .split("-")
+        .slice(0, 2)
+        .map((i) => parseInt(i));
+      computer.receiveAttack(cellPosition);
+    });
   });
 });
+
