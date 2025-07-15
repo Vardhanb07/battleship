@@ -45,24 +45,23 @@ for (let i = 0; i < 10; i++) {
   computerBoard.appendChild(outerDiv);
 }
 
-const gameSection = document.querySelector('.game-section')
-const startSection = document.querySelector('.start-section')
+const gameSection = document.querySelector(".game-section");
+const startSection = document.querySelector(".start-section");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const reset = document.querySelector('.reset')
-  reset.addEventListener('click', () => {
-    for(let i = 0; i < 10; i++) {
-      for(let j = 0; j < 10; j++) {
+  const reset = document.querySelector(".reset");
+  reset.addEventListener("click", () => {
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
         document
           .querySelector(`div[data-position="${i}-${j}-rp"]`)
           .removeAttribute("id");
       }
     }
 
-    gameSection.style.display = 'none'
-    startSection.style.display = 'flex'
-  })
-
+    gameSection.style.display = "none";
+    startSection.style.display = "flex";
+  });
 
   document.querySelector("#randomize").addEventListener("click", () => {
     for (let i = 0; i < 10; i++) {
@@ -92,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    gameSection.style.display = 'flex'
-    startSection.style.display = 'none'
+    gameSection.style.display = "flex";
+    startSection.style.display = "none";
   });
 
   const realPlayerCells = document.querySelectorAll(".board > div > div");
@@ -119,5 +118,224 @@ document.addEventListener("DOMContentLoaded", () => {
       computer.receiveAttack(cellPosition);
     });
   });
-});
 
+  //Direction -> axis direction like "X" or "Y"
+
+  const axisButton = document.querySelector("button");
+  axisButton.addEventListener("click", () => {
+    const direction = axisButton.textContent
+      .split(":")
+      .slice(1, 2)
+      .toString()
+      .slice(1, 2);
+    direction === "X"
+      ? (axisButton.textContent = "Axis: Y")
+      : (axisButton.textContent = "Axis: X");
+  });
+
+  let placedShips = {
+    0: {
+      length: shipsLength[0],
+      placed: false,
+    },
+    1: {
+      length: shipsLength[1],
+      placed: false,
+    },
+    2: {
+      length: shipsLength[2],
+      placed: false,
+    },
+    3: {
+      length: shipsLength[3],
+      placed: false,
+    },
+    4: {
+      length: shipsLength[4],
+      placed: false,
+    },
+  };
+
+  let placedShipsPosition = {
+    0: {
+      start: null,
+      end: null,
+    },
+    1: {
+      start: null,
+      end: null,
+    },
+    2: {
+      start: null,
+      end: null,
+    },
+    3: {
+      start: null,
+      end: null,
+    },
+    4: {
+      start: null,
+      end: null,
+    },
+  };
+  let x = 0;
+  function getFirstUnplacedShip(bool = false) {
+    let length = 0;
+    for (let i = 0; i < 5; i++) {
+      if (!placedShips[i].placed) {
+        length = placedShips[i].length;
+        bool ? (placedShips[i].placed = true) : (placedShips[i].placed = false);
+        break;
+      }
+    }
+    return length;
+  }
+
+  function checkPlacementOfShip(position, length, direction) {
+    let bool = null;
+    direction === "X"
+      ? (bool = position[1] + length < 10)
+      : (bool = position[0] + length < 10);
+    if (direction === "X" && bool) {
+      for (let i = position[1]; i <= position[1] + length; i++) {
+        if (
+          document
+            .querySelector(`div[data-position="${position[0]}-${i}"]`)
+            .hasAttribute("data-isPlaced")
+        ) {
+          bool = false;
+          break;
+        }
+      }
+    } else if (direction === "Y" && bool) {
+      for (let i = position[0]; i <= position[0] + length; i++) {
+        if (
+          document
+            .querySelector(`div[data-position="${i}-${position[1]}"]`)
+            .hasAttribute("data-isPlaced")
+        ) {
+          bool = false;
+          break;
+        }
+      }
+    }
+    return bool;
+  }
+
+  const gameBoardCells = document.querySelectorAll(".game-board > div > div");
+  gameBoardCells.forEach((cell) => {
+    cell.addEventListener("mouseover", () => {
+      const direction = axisButton.textContent
+        .split(":")
+        .slice(1, 2)
+        .toString()
+        .slice(1, 2);
+      const position = cell
+        .getAttribute("data-position")
+        .split("-")
+        .map((i) => parseInt(i));
+      let bool = checkPlacementOfShip(
+        position,
+        getFirstUnplacedShip() - 1,
+        direction
+      );
+      if (bool) {
+        if (direction === "X") {
+          for (
+            let i = position[1];
+            i <= position[1] + getFirstUnplacedShip() - 1;
+            i++
+          ) {
+            let cs = `${position[0]}-${i}`;
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("id", "drop");
+          }
+        } else if (direction === "Y") {
+          for (
+            let i = position[0];
+            i <= position[0] + getFirstUnplacedShip() - 1;
+            i++
+          ) {
+            let cs = `${i}-${position[1]}`;
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("id", "drop");
+          }
+        }
+      }
+    });
+
+    cell.addEventListener("mouseleave", () => {
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+          if (
+            !document
+              .querySelector(`div[data-position="${i}-${j}"]`)
+              .hasAttribute("data-isPlaced")
+          ) {
+            document
+              .querySelector(`div[data-position="${i}-${j}"]`)
+              .removeAttribute("id");
+          }
+        }
+      }
+    });
+
+    cell.addEventListener("click", () => {
+      const direction = axisButton.textContent
+        .split(":")
+        .slice(1, 2)
+        .toString()
+        .slice(1, 2);
+      const position = cell
+        .getAttribute("data-position")
+        .split("-")
+        .map((i) => parseInt(i));
+      let bool = checkPlacementOfShip(
+        position,
+        getFirstUnplacedShip() - 1,
+        direction
+      );
+      if (bool) {
+        if (direction === "X") {
+          for (
+            let i = position[1];
+            i <= position[1] + getFirstUnplacedShip() - 1;
+            i++
+          ) {
+            let cs = `${position[0]}-${i}`;
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("id", "drop");
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("data-isPlaced", "true");
+          }
+          placedShipsPosition[x].start = position;
+          position[1] += length;
+          placedShipsPosition[x].end = position;
+        } else if (direction === "Y") {
+          for (
+            let i = position[0];
+            i <= position[0] + getFirstUnplacedShip() - 1;
+            i++
+          ) {
+            let cs = `${i}-${position[1]}`;
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("id", "drop");
+            document
+              .querySelector(`div[data-position="${cs}"]`)
+              .setAttribute("data-isPlaced", "true");
+          }
+          placedShipsPosition[x].start = position;
+          position[0] += length;
+          placedShipsPosition[x].start = position;
+        }
+        x++;
+        getFirstUnplacedShip(true);
+      }
+    });
+  });
+});
