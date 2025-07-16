@@ -8,7 +8,7 @@ class Ship {
     this.hits++;
   }
   isSunk() {
-    if (this.hits === this.length - 1) {
+    if (this.hits === this.length) {
       this.isShipSunk = true;
     }
     return this.isShipSunk;
@@ -86,20 +86,6 @@ class Gameboard {
       this.missedAtttacks.push(position);
     }
   }
-  areShipsSunk() {
-    let bool = true;
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        if (this.board[i][j] !== null && this.board[i][j] !== "X") {
-          if (!this.board[i][j].isSunk()) {
-            bool = false;
-            break;
-          }
-        }
-      }
-    }
-    return bool;
-  }
 }
 export class Player {
   constructor() {
@@ -145,13 +131,22 @@ export class Player {
     this.gameboard.receiveAttack(position);
   }
   areShipsSunk() {
-    return this.gameboard.areShipsSunk();
+    let bool = false
+    if(this.ships[0].isSunk()) {
+      bool = this.ships[0].isSunk()
+    }
+    for(let i = 1; i < 5; i++) {
+      this.ships[i].isSunk()
+      bool = bool && this.ships[i].isSunk()
+    }
+    return bool
   }
   flushShips() {
     this.board = new Array(10).fill(null).map(() => new Array(10).fill(null));
     this.gameboard = new Gameboard(this.board)
-  }
-  print() {
-    console.log(this.board);
+    for(let i of this.ships) {
+      i.hits = 0
+      i.isShipSunk = false
+    }
   }
 }

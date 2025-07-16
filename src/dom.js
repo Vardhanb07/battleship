@@ -201,30 +201,29 @@ document.addEventListener("DOMContentLoaded", () => {
             .setAttribute("id", "attack");
         }
       }
+      const conclusionSection = document.querySelector(".conclusion-section");
+      const conclusionText = document.querySelector(".conclusion-text");
+      if (real.areShipsSunk() && computer.areShipsSunk()) {
+        conclusionText.textContent = "It's a tie!";
+        conclusionSection.style.display = "flex";
+        gameSection.style.display = "none";
+      } else if (real.areShipsSunk()) {
+        conclusionText.textContent = "You lose!";
+        conclusionSection.style.display = "flex";
+        startSection.style.display = "none";
+      } else if (computer.areShipsSunk()) {
+        conclusionText.textContent = "You win!";
+        conclusionSection.style.display = "flex";
+        gameSection.style.display = "none";
+      }
     });
   });
-  const conclusionSection = document.querySelector(".conclusion-section");
-  const conclusionText = document.querySelector(".conclusion-text");
+
   const homeScreen = document.querySelector(".home-screen");
-  computerBoard.addEventListener("click", () => {
-    if (real.areShipsSunk() && computer.areShipsSunk()) {
-      conclusionText.textContent = "It's a tie!";
-      conclusionSection.style.display = "flex";
-      gameSection.style.display = "none";
-    } else if (real.areShipsSunk()) {
-      conclusionText.textContent = "You lose!";
-      conclusionSection.style.display = "flex";
-      startSection.style.display = "none";
-    } else if (computer.areShipsSunk()) {
-      conclusionText.textContent = "You won!";
-      conclusionSection.style.display = "flex";
-      gameSection.style.display = "none";
-    }
-  });
 
   homeScreen.addEventListener("click", () => {
     startSection.style.display = "flex";
-    conclusionSection.style.display = "none";
+    document.querySelector(".conclusion-section").style.display = "none";
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
         document
