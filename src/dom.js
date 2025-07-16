@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   let x = 0;
   function getFirstUnplacedShip(bool = false) {
-    let length = 0;
+    let length = null;
     for (let i = 0; i < 5; i++) {
       if (!placedShips[i].placed) {
         length = placedShips[i].length;
@@ -234,11 +234,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .getAttribute("data-position")
         .split("-")
         .map((i) => parseInt(i));
-      let bool = checkPlacementOfShip(
-        position,
-        getFirstUnplacedShip() - 1,
-        direction
-      );
+      let bool = false;
+      if (getFirstUnplacedShip()) {
+        bool = checkPlacementOfShip(
+          position,
+          getFirstUnplacedShip() - 1,
+          direction
+        );
+      }
       if (bool) {
         if (direction === "X") {
           for (
@@ -292,11 +295,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .getAttribute("data-position")
         .split("-")
         .map((i) => parseInt(i));
-      let bool = checkPlacementOfShip(
-        position,
-        getFirstUnplacedShip() - 1,
-        direction
-      );
+      let bool = false;
+      if (getFirstUnplacedShip()) {
+        bool = checkPlacementOfShip(
+          position,
+          getFirstUnplacedShip() - 1,
+          direction
+        );
+      }
       if (bool) {
         if (direction === "X") {
           for (
@@ -312,9 +318,10 @@ document.addEventListener("DOMContentLoaded", () => {
               .querySelector(`div[data-position="${cs}"]`)
               .setAttribute("data-isPlaced", "true");
           }
-          placedShipsPosition[x].start = position;
-          position[1] += length;
-          placedShipsPosition[x].end = position;
+          let start = position;
+          let end = [start[0], start[1] + getFirstUnplacedShip() - 1];
+          placedShipsPosition[x].start = start;
+          placedShipsPosition[x].end = end;
         } else if (direction === "Y") {
           for (
             let i = position[0];
@@ -329,9 +336,10 @@ document.addEventListener("DOMContentLoaded", () => {
               .querySelector(`div[data-position="${cs}"]`)
               .setAttribute("data-isPlaced", "true");
           }
-          placedShipsPosition[x].start = position;
-          position[0] += length;
-          placedShipsPosition[x].start = position;
+          let start = position;
+          let end = [start[0] + getFirstUnplacedShip() - 1, start[1]];
+          placedShipsPosition[x].start = start;
+          placedShipsPosition[x].end = end;
         }
         x++;
         getFirstUnplacedShip(true);
