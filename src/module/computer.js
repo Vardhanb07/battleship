@@ -45,21 +45,26 @@ export function initialize(length) {
   direction === "H" ? (endPosition[1] += length) : (endPosition[0] += length);
   return [startPosition, endPosition];
 }
-let shipsLength = [5, 4, 3, 3, 2];
-for (let i = 0; i < shipsLength.length; i++) {
-  const position = initialize(shipsLength[i] - 1);
-  computer.place(position[0], position[1], i);
+export function computerShipsRandomize() {
+  let shipsLength = [5, 4, 3, 3, 2];
+  for (let i = 0; i < shipsLength.length; i++) {
+    const position = initialize(shipsLength[i] - 1);
+    computer.place(position[0], position[1], i);
+  }
 }
-let a = new Set();
+let b = new Set();
 export function attack() {
-  let prevSize = a.size;
+  let prevSize = b.size;
   let position = [getRandomInt(10), getRandomInt(10)];
-  a.add(`${position[0]}-${position[1]}`);
-  while (a.size === prevSize) {
+  b.add(`${position[0]}-${position[1]}`);
+  while (b.size === prevSize) {
     position = [getRandomInt(10), getRandomInt(10)];
-    a.add(`${position[0]}-${position[1]}`);
+    b.add(`${position[0]}-${position[1]}`);
   }
   return position;
+}
+export function flushSetb() {
+  b = new Set()
 }
 export function hasShip(position) {
   let bool = false;
