@@ -56,6 +56,24 @@ document.addEventListener("DOMContentLoaded", () => {
         document
           .querySelector(`div[data-position="${i}-${j}-rp"]`)
           .removeAttribute("id");
+        document
+          .querySelector(`div[data-position="${i}-${j}-rp"]`)
+          .removeAttribute("data-object");
+        document
+          .querySelector(`div[data-position="${i}-${j}-cp"]`)
+          .removeAttribute("id");
+        document
+          .querySelector(`div[data-position="${i}-${j}-cp"]`)
+          .removeAttribute("data-object");
+        document
+          .querySelector(`div[data-position="${i}-${j}"]`)
+          .removeAttribute("data-isPlaced");
+        document
+          .querySelector(`div[data-position="${i}-${j}"]`)
+          .removeAttribute("data-object");
+        document
+          .querySelector(`div[data-position="${i}-${j}"]`)
+          .removeAttribute("id");
       }
     }
 
@@ -64,6 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelector("#randomize").addEventListener("click", () => {
+    a = new Set();
+    computer.flushShips();
+    real.flushShips();
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
         document
@@ -71,6 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
           .removeAttribute("id");
         document
           .querySelector(`div[data-position="${i}-${j}-rp"]`)
+          .removeAttribute("data-object");
+        document
+          .querySelector(`div[data-position="${i}-${j}-cp"]`)
+          .removeAttribute("id");
+        document
+          .querySelector(`div[data-position="${i}-${j}-cp"]`)
           .removeAttribute("data-object");
       }
     }
@@ -114,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const computerCells = document.querySelectorAll(
     ".computer-board > div > div"
   );
+  let a = new Set();
   computerCells.forEach((cell) => {
     cell.addEventListener("click", () => {
       const cellPosition = cell
@@ -121,41 +149,56 @@ document.addEventListener("DOMContentLoaded", () => {
         .split("-")
         .slice(0, 2)
         .map((i) => parseInt(i));
-      computer.receiveAttack(cellPosition);
-      let attackPosition = attack();
-      if (
-        document
-          .querySelector(
-            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
-          )
-          .hasAttribute("data-object")
-      ) {
-        document
-          .querySelector(
-            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
-          )
-          .setAttribute("id", "attackShip");
-      } else {
-        document
-          .querySelector(
-            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
-          )
-          .setAttribute("id", "attack");
-      }
-      if (hasShip(cellPosition)) {
-        document
-          .querySelector(
-            `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
-          )
-          .setAttribute("id", "attackShip");
-      } else {
-        document
-          .querySelector(
-            `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
-          )
-          .setAttribute("id", "attack");
+      let prevLength = a.size;
+      a.add(`${cellPosition[0]}-${cellPosition[1]}`);
+      if (a.size > prevLength) {
+        computer.receiveAttack(cellPosition);
+        let attackPosition = attack();
+        if (
+          document
+            .querySelector(
+              `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+            )
+            .hasAttribute("data-object")
+        ) {
+          document
+            .querySelector(
+              `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+            )
+            .setAttribute("id", "attackShip");
+        } else {
+          document
+            .querySelector(
+              `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+            )
+            .setAttribute("id", "attack");
+        }
+
+        if (hasShip(cellPosition)) {
+          document
+            .querySelector(
+              `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
+            )
+            .setAttribute("id", "attackShip");
+        } else {
+          document
+            .querySelector(
+              `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
+            )
+            .setAttribute("id", "attack");
+        }
       }
     });
+  });
+
+  computerBoard.addEventListener("click", () => {
+    if (real.areShipsSunk() && computer.areShipsSunk()) {
+      console.log("It's a tie!");
+    } else if (real.areShipsSunk()) {
+      console.log("you lose!");
+    } else if (computer.areShipsSunk()) {
+      console.log("you win!");
+    }
   });
 
   //Direction -> axis direction like "X" or "Y"
