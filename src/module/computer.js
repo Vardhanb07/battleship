@@ -1,5 +1,4 @@
 import { Player } from "./app.js";
-import { real } from "./real.js";
 export function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -13,8 +12,8 @@ export function isValid(firstOrdinate, secondOrdinate, length, direction) {
 export const computer = new Player();
 export const directions = ["H", "V"];
 export function getRandomPosition(length) {
-  let firstOrdinate = getRandomInt(9);
-  let secondOrdinate = getRandomInt(9);
+  let firstOrdinate = getRandomInt(10);
+  let secondOrdinate = getRandomInt(10);
   let direction = directions[getRandomInt(2)];
   if (
     !(
@@ -28,8 +27,8 @@ export function getRandomPosition(length) {
         computer.canBePlaced(firstOrdinate, secondOrdinate, length, direction)
       )
     ) {
-      firstOrdinate = getRandomInt(9);
-      secondOrdinate = getRandomInt(9);
+      firstOrdinate = getRandomInt(10);
+      secondOrdinate = getRandomInt(10);
       direction = directions[getRandomInt(2)];
     }
   }
@@ -51,15 +50,24 @@ for (let i = 0; i < shipsLength.length; i++) {
   const position = initialize(shipsLength[i] - 1);
   computer.place(position[0], position[1], i);
 }
+let a = new Set();
 export function attack() {
-  let position = [getRandomInt(9), getRandomInt(9)]
-  real.receiveAttack(position)
-  return position
+  let prevSize = a.size;
+  let position = [getRandomInt(10), getRandomInt(10)];
+  a.add(`${position[0]}-${position[1]}`);
+  while (a.size === prevSize) {
+    position = [getRandomInt(10), getRandomInt(10)];
+    a.add(`${position[0]}-${position[1]}`);
+  }
+  return position;
 }
 export function hasShip(position) {
-  let bool = false
-  if(computer.board[position[0]][position[1]] !== null && computer.board[position[0]][position[1]] !== "X") {
-    bool = true
+  let bool = false;
+  if (
+    computer.board[position[0]][position[1]] !== null &&
+    computer.board[position[0]][position[1]] !== "X"
+  ) {
+    bool = true;
   }
-  return bool
-} 
+  return bool;
+}

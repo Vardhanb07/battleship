@@ -8,7 +8,7 @@ class Ship {
     this.hits++;
   }
   isSunk() {
-    if (this.hits === this.length) {
+    if (this.hits === this.length - 1) {
       this.isShipSunk = true;
     }
     return this.isShipSunk;
@@ -146,6 +146,10 @@ export class Player {
   }
   areShipsSunk() {
     return this.gameboard.areShipsSunk();
+  }
+  flushShips() {
+    this.board = new Array(10).fill(null).map(() => new Array(10).fill(null));
+    this.gameboard = new Gameboard(this.board)
   }
   print() {
     console.log(this.board);

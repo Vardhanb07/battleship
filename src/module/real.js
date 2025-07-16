@@ -6,8 +6,8 @@ export const real = new Player();
 export const shipsPostiton = {};
 
 function getRandomPosition(length) {
-  let firstOrdinate = getRandomInt(9);
-  let secondOrdinate = getRandomInt(9);
+  let firstOrdinate = getRandomInt(10);
+  let secondOrdinate = getRandomInt(10);
   let direction = directions[getRandomInt(2)];
   if (
     !(
@@ -21,8 +21,8 @@ function getRandomPosition(length) {
         real.canBePlaced(firstOrdinate, secondOrdinate, length, direction)
       )
     ) {
-      firstOrdinate = getRandomInt(9);
-      secondOrdinate = getRandomInt(9);
+      firstOrdinate = getRandomInt(10);
+      secondOrdinate = getRandomInt(10);
       direction = directions[getRandomInt(2)];
     }
   }
