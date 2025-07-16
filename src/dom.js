@@ -1,4 +1,4 @@
-import { computer } from "./module/computer.js";
+import { computer, attack, hasShip } from "./module/computer.js";
 import { real, randomize, shipsPostiton } from "./module/real.js";
 
 const ships = document.querySelectorAll(".ships > div");
@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document
           .querySelector(`div[data-position="${i}-${j}-rp"]`)
           .removeAttribute("id");
+        document
+          .querySelector(`div[data-position="${i}-${j}-rp"]`)
+          .removeAttribute("data-object");
       }
     }
 
@@ -91,23 +94,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        if (
+          document
+            .querySelector(`div[data-position="${i}-${j}-rp"]`)
+            .hasAttribute("id")
+        ) {
+          document
+            .querySelector(`div[data-position="${i}-${j}-rp"]`)
+            .setAttribute("data-object", "ship");
+        }
+      }
+    }
     gameSection.style.display = "flex";
     startSection.style.display = "none";
   });
 
-  const realPlayerCells = document.querySelectorAll(".board > div > div");
-  realPlayerCells.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      const cellPosition = cell
-        .getAttribute("data-position")
-        .split("-")
-        .slice(0, 2)
-        .map((i) => parseInt(i));
-      real.receiveAttack(cellPosition);
-    });
-  });
-
-  const computerCells = document.querySelectorAll("computer-board > div > div");
+  const computerCells = document.querySelectorAll(
+    ".computer-board > div > div"
+  );
   computerCells.forEach((cell) => {
     cell.addEventListener("click", () => {
       const cellPosition = cell
@@ -116,6 +122,39 @@ document.addEventListener("DOMContentLoaded", () => {
         .slice(0, 2)
         .map((i) => parseInt(i));
       computer.receiveAttack(cellPosition);
+      let attackPosition = attack();
+      if (
+        document
+          .querySelector(
+            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+          )
+          .hasAttribute("data-object")
+      ) {
+        document
+          .querySelector(
+            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+          )
+          .setAttribute("id", "attackShip");
+      } else {
+        document
+          .querySelector(
+            `div[data-position="${attackPosition[0]}-${attackPosition[1]}-rp"]`
+          )
+          .setAttribute("id", "attack");
+      }
+      if (hasShip(cellPosition)) {
+        document
+          .querySelector(
+            `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
+          )
+          .setAttribute("id", "attackShip");
+      } else {
+        document
+          .querySelector(
+            `div[data-position="${cellPosition[0]}-${cellPosition[1]}-cp"]`
+          )
+          .setAttribute("id", "attack");
+      }
     });
   });
 
@@ -266,6 +305,50 @@ document.addEventListener("DOMContentLoaded", () => {
               .setAttribute("id", "drop");
           }
         }
+      } else if (!getFirstUnplacedShip()) {
+        for (let i = 0; i < 10; i++) {
+          for (let j = 0; j < 10; j++) {
+            document
+              .querySelector(`div[data-position="${i}-${j}-rp"]`)
+              .removeAttribute("data-object");
+          }
+        }
+
+        for (let i = 0; i < 5; i++) {
+          let start = placedShipsPosition[i].start;
+          let end = placedShipsPosition[i].end;
+          if (start[0] === end[0]) {
+            for (let j = start[1]; j <= end[1]; j++) {
+              document
+                .querySelector(`div[data-position="${start[0]}-${j}-rp"]`)
+                .setAttribute("id", "drop");
+            }
+          } else if (start[1] === end[1]) {
+            for (let j = start[0]; j <= end[0]; j++) {
+              document
+                .querySelector(`div[data-position="${j}-${start[1]}-rp"]`)
+                .setAttribute("id", "drop");
+            }
+          }
+          real.place(start, end, i);
+        }
+
+        for (let i = 0; i < 10; i++) {
+          for (let j = 0; j < 10; j++) {
+            if (
+              document
+                .querySelector(`div[data-position="${i}-${j}-rp"]`)
+                .hasAttribute("id")
+            ) {
+              document
+                .querySelector(`div[data-position="${i}-${j}-rp"]`)
+                .setAttribute("data-object", "ship");
+            }
+          }
+        }
+
+        gameSection.style.display = "flex";
+        startSection.style.display = "none";
       }
     });
 

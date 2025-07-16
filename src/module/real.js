@@ -45,7 +45,7 @@ export function randomize() {
   const shipsLength = [5, 4, 3, 3, 2];
   for (let i = 0; i < shipsLength.length; i++) {
     const position = realInitialize(shipsLength[i] - 1);
-    real.place(position[0], position[1]);
+    real.place(position[0], position[1], i);
     shipsPostiton[i] = {
       start: position[0],
       end: position[1],

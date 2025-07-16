@@ -1,4 +1,5 @@
 import { Player } from "./app.js";
+import { real } from "./real.js";
 export function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -50,3 +51,15 @@ for (let i = 0; i < shipsLength.length; i++) {
   const position = initialize(shipsLength[i] - 1);
   computer.place(position[0], position[1], i);
 }
+export function attack() {
+  let position = [getRandomInt(9), getRandomInt(9)]
+  real.receiveAttack(position)
+  return position
+}
+export function hasShip(position) {
+  let bool = false
+  if(computer.board[position[0]][position[1]] !== null && computer.board[position[0]][position[1]] !== "X") {
+    bool = true
+  }
+  return bool
+} 

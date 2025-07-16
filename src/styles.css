@@ -103,9 +103,19 @@ body {
   width: 50px;
   height: 50px;
   border: 1px solid black;
+  cursor: pointer;
+}
+.board > div > div  {
+  cursor: not-allowed;
 }
 #drop {
   background-color: rgb(139, 185, 245);
+}
+#attack {
+  background-color: gray;
+}
+#attackShip {
+  background-color: rgba(235, 74, 74, 0.645);
 }
 .place-ships {
   flex: 1;
@@ -137,4 +147,5 @@ body {
   width: 50px;
   height: 50px;
   border: 1px solid black;
+  cursor: pointer;
 }
